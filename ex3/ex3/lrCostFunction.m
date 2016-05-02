@@ -36,14 +36,10 @@ grad = zeros(size(theta));
 %           grad = grad + YOUR_CODE_HERE (using the temp variable)
 %
 
-
-
-
-
-
-
-
-
+temp = theta;
+temp(1) = 0;
+J = 1 / m * sum(-y .* log(sigmoid(X * theta)) - (1 - y) .* log(1 - sigmoid(X * theta))) + lambda / (2 * m) * (temp') * temp;
+grad = 1 / m * sum(bsxfun(@times, sigmoid(X * theta) - y, X))' + lambda / m * temp;
 
 % =============================================================
 
