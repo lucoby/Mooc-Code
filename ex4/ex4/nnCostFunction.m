@@ -63,22 +63,22 @@ Theta2_grad = zeros(size(Theta2));
 %
 
 %add ones to X
-X = [ones(m, 1) X];
+a_1 = [ones(m, 1) X];
+z_2 = a_1 * Theta1';
+a_2 = [ones(m, 1) sigmoid(z_2)];
+z_3 = a_2 * Theta2';
+a_3 = sigmoid(z_3);
+[temp, p] = max(a_3, [], 2);
 
-temp = Theta1;
-temp(1) = 0;
-h = sigmoid(X * Theta1);
-J1 = 1 / m * (-y' * log(h) - (1 - y)' * log(1 - h)) + lambda / (2 * m) * (temp') * temp;
-Theta1_grad = 1 / m * X' * (h - y) + lambda / m * temp;
+Y = y;
 
-temp = Theta2;
-temp(1) = 0;
-h = sigmoid(X * Theta1);
-J2 = 1 / m * (-y' * log(h) - (1 - y)' * log(1 - h)) + lambda / (2 * m) * (temp') * temp;
-Theta2_grad = 1 / m * X' * (h - y) + lambda / m * temp;
+for label = 1:num_labels
+    y = double(Y == label);
+    h = a_3(:, label);
+    J = J - (y' * log(h) + (1 - y)' * log(1 - h));
+end
 
-J = J1 + J2;
-
+J = J / m;
 % -------------------------------------------------------------
 
 % =========================================================================
