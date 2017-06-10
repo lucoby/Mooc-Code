@@ -72,18 +72,20 @@ z_3 = a_2 * Theta2';
 a_3 = sigmoid(z_3);
 
 % Cost function
-Y = y;
-for label = 1:num_labels
-    y = double(Y == label);
-    h = a_3(:, label);
-    J = J - (y' * log(h) + (1 - y)' * log(1 - h));
-end
+% Y = y;
+% for label = 1:num_labels
+%     y = double(Y == label);
+%     h = a_3(:, label);
+%     J = J - (y' * log(h) + (1 - y)' * log(1 - h));
+% end
+y_matrix = eye(num_labels);
+y_matrix = y_matrix(y, :);
+J = -(sum(sum(y_matrix.*log(a_3))) + sum(sum((1-y_matrix).*log(1-a_3))));
 J_regular = sum(sum(Theta1(:, 2:end) .^ 2)) + sum(sum(Theta2(:, 2:end) .^ 2));
 J = J / m + lambda / (2 * m) * J_regular;
 
 % Backpropogation
-y_matrix = eye(num_labels);
-y_matrix = y_matrix(Y, :);
+
 delta_3 = a_3 - y_matrix;
 delta_2 = delta_3 * Theta2 .* [ones(m, 1), sigmoidGradient(z_2)];
 delta_2 = delta_2(:, 2:end);
